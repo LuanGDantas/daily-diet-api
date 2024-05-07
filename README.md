@@ -6,6 +6,28 @@
 
 Desenvolver uma API para controle de dieta diária, a Daily Diet API.
 
+## Entidades de Banco de dados
+
+### Users
+
+- id
+- name
+- email
+- session_id
+- created_at
+- updated_at
+
+### Meals
+
+- id
+- name
+- description
+- date_time
+- is_on_diet
+- user_id
+- created_at
+- updated_at
+
 ## Requisitos
 
 ### Requisitos Funcionais
