@@ -1,0 +1,24 @@
+{
+  "name": "daily-diet-api",
+  "version": "1.0.0",
+  "description": "API para controle de dieta diária, a Daily Diet API",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src --ext .ts --fix",
+    "dev": "tsx watch src/server.ts",
+    "start": "node build/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rocketseat/eslint-config": "^2.2.2",
+    "@types/node": "^20.12.10",
+    "tsx": "^4.9.3",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "fastify": "^4.27.0"
+  }
+}
