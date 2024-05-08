@@ -15,7 +15,7 @@ export async function mealsRoutes(app: FastifyInstance) {
         .object({
           name: z.string(),
           description: z.string(),
-          dateTime: z.coerce.string().datetime({ offset: true }),
+          dateTime: z.coerce.date(),
           isOnDiet: z.boolean(),
         })
         .parse(request.body)
@@ -25,7 +25,7 @@ export async function mealsRoutes(app: FastifyInstance) {
         user_id: request.user?.id,
         name,
         description,
-        date_time: dateTime,
+        date_time: dateTime.toISOString(),
         is_on_diet: isOnDiet,
       })
 
@@ -49,7 +49,7 @@ export async function mealsRoutes(app: FastifyInstance) {
         .object({
           name: z.string(),
           description: z.string(),
-          dateTime: z.coerce.string().datetime(),
+          dateTime: z.coerce.date(),
           isOnDiet: z.boolean(),
         })
         .parse(request.body)
@@ -64,7 +64,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       await connection('meals').where({ id }).update({
         name,
         description,
-        date_time: dateTime,
+        date_time: dateTime.toISOString(),
         is_on_diet: isOnDiet,
         updated_at: connection.fn.now(),
       })
@@ -134,6 +134,47 @@ export async function mealsRoutes(app: FastifyInstance) {
       }
 
       return reply.status(200).send(meal)
+    },
+  )
+
+  app.get(
+    '/metrics',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const meals = await connection('meals')
+        .where({ user_id: request.user?.id })
+        .orderBy('date_time', 'desc')
+
+      const [{ totalMealsOnDiet }] = await connection('meals')
+        .where({ user_id: request.user?.id, is_on_diet: true })
+        .count('id', { as: 'totalMealsOnDiet' })
+
+      const [{ totalMealsOffDiet }] = await connection('meals')
+        .where({ user_id: request.user?.id, is_on_diet: false })
+        .count('id', { as: 'totalMealsOffDiet' })
+
+      let currentSequece = 0
+      let bestOnDietSequece = 0
+      for (const meal of meals) {
+        if (meal.is_on_diet) {
+          currentSequece += 1
+        } else {
+          currentSequece = 0
+        }
+
+        if (currentSequece > bestOnDietSequece) {
+          bestOnDietSequece = currentSequece
+        }
+      }
+
+      return reply.status(200).send({
+        totalMeals: meals.length,
+        totalMealsOnDiet,
+        totalMealsOffDiet,
+        bestOnDietSequece,
+      })
     },
   )
 }
