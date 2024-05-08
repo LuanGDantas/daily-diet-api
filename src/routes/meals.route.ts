@@ -33,6 +33,45 @@ export async function mealsRoutes(app: FastifyInstance) {
     },
   )
 
+  app.put(
+    '/:id',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const { id } = z
+        .object({
+          id: z.string().uuid(),
+        })
+        .parse(request.params)
+
+      const { name, description, dateTime, isOnDiet } = z
+        .object({
+          name: z.string(),
+          description: z.string(),
+          dateTime: z.coerce.string().datetime(),
+          isOnDiet: z.boolean(),
+        })
+        .parse(request.body)
+
+      const meal = await connection('meals').where({ id }).first()
+
+      if (!meal) {
+        return reply
+          .status(404)
+          .send({ status: 'error', message: 'Meal not found' })
+      }
+
+      await connection('meals').where({ id }).update({
+        name,
+        description,
+        date_time: dateTime,
+        is_on_diet: isOnDiet,
+        updated_at: connection.fn.now(),
+      })
+    },
+  )
+
   app.get(
     '/',
     {
