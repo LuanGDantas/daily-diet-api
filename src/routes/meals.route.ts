@@ -55,7 +55,6 @@ export async function mealsRoutes(app: FastifyInstance) {
         .parse(request.body)
 
       const meal = await connection('meals').where({ id }).first()
-
       if (!meal) {
         return reply
           .status(404)
@@ -69,6 +68,33 @@ export async function mealsRoutes(app: FastifyInstance) {
         is_on_diet: isOnDiet,
         updated_at: connection.fn.now(),
       })
+    },
+  )
+
+  app.delete(
+    '/:id',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const { id } = z
+        .object({
+          id: z.string().uuid(),
+        })
+        .parse(request.params)
+
+      const meal = await connection('meals')
+        .where({ id, user_id: request.user?.id })
+        .first()
+      if (!meal) {
+        return reply
+          .status(404)
+          .send({ status: 'error', message: 'Meal not found' })
+      }
+
+      await connection('meals')
+        .where({ id, user_id: request.user?.id })
+        .delete()
     },
   )
 
