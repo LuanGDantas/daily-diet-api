@@ -111,4 +111,29 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(200).send({ meals })
     },
   )
+
+  app.get(
+    '/:id',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const { id } = z
+        .object({
+          id: z.string().uuid(),
+        })
+        .parse(request.params)
+
+      const meal = await connection('meals')
+        .where({ id, user_id: request.user?.id })
+        .first()
+      if (!meal) {
+        return reply
+          .status(404)
+          .send({ status: 'error', message: 'Meal not found' })
+      }
+
+      return reply.status(200).send(meal)
+    },
+  )
 }
