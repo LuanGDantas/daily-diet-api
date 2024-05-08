@@ -16,4 +16,6 @@ export async function checkSessionIdExists(
   if (!user) {
     return reply.status(401).send({ status: 'error', message: 'Unauthorized' })
   }
+
+  request.user = user
 }
