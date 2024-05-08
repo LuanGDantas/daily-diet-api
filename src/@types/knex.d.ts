@@ -24,5 +24,6 @@ declare module 'knex/types/tables' {
 
   export interface Tables {
     users: Users
+    meals: Meals
   }
 }
