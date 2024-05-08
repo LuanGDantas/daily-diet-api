@@ -32,4 +32,18 @@ export async function mealsRoutes(app: FastifyInstance) {
       return reply.status(201).send()
     },
   )
+
+  app.get(
+    '/',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const meals = await connection('meals')
+        .where({ user_id: request.user?.id })
+        .orderBy('date_time', 'desc')
+
+      return reply.status(200).send({ meals })
+    },
+  )
 }
