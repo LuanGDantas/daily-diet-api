@@ -68,6 +68,8 @@ export async function mealsRoutes(app: FastifyInstance) {
         is_on_diet: isOnDiet,
         updated_at: connection.fn.now(),
       })
+
+      return reply.status(204).send()
     },
   )
 
@@ -95,6 +97,8 @@ export async function mealsRoutes(app: FastifyInstance) {
       await connection('meals')
         .where({ id, user_id: request.user?.id })
         .delete()
+
+      return reply.status(204).send()
     },
   )
 
