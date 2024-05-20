@@ -46,7 +46,7 @@ Desenvolver uma API para controle de dieta diária, a Daily Diet API.
   - [x] Quantidade total de refeições fora da dieta
   - [x] Melhor sequência de refeições dentro da dieta
 
-### Requisitos Não Funcionais
+### Regras de Negócio
 
 - [x] As refeições devem ser relacionadas a um usuário.;
 - [x] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
