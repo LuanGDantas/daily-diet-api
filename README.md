@@ -1,10 +1,6 @@
-# Desafio 02 da Formação de Node.js da Rocketseat
+# Daily Diet API
 
-**Módulo: Criando APIs RESTfull com Node.js**
-
-## Sobre o desafio
-
-Desenvolver uma API para controle de dieta diária, a Daily Diet API.
+API para controle de dieta diária.
 
 ## Entidades de Banco de dados
 
