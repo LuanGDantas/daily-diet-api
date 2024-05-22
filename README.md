@@ -25,6 +25,11 @@ API para controle de dieta diária.
 - created_at
 - updated_at
 
+## Regras de Negócio
+
+- [x] As refeições devem ser relacionadas a um usuário.;
+- [x] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+
 ## Requisitos
 
 ### Requisitos Funcionais
@@ -42,7 +47,6 @@ API para controle de dieta diária.
   - [x] Quantidade total de refeições fora da dieta
   - [x] Melhor sequência de refeições dentro da dieta
 
-### Regras de Negócio
+### Requisitos Não-Funcionais
 
-- [x] As refeições devem ser relacionadas a um usuário.;
-- [x] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+- [x] Utilizar banco de dados Sqlite em Desenvolvimento e PostgreSQL em Produção
